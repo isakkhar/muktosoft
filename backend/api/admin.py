@@ -4,8 +4,18 @@ from .models import (
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
-    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ
+    ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
+    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ, ProductPricingPlan,
+    NewsletterSubscription, ChatbotLead
 )
+
+
+@admin.register(ChatbotLead)
+class ChatbotLeadAdmin(admin.ModelAdmin):
+    list_display = ['name', 'mobile', 'created_at']
+    search_fields = ['name', 'mobile']
+    readonly_fields = ['created_at']
+    ordering = ['-created_at']
 
 
 @admin.register(SiteSettings)
@@ -47,12 +57,44 @@ class HeroFloatingCardAdmin(admin.ModelAdmin):
     ordering = ['order']
 
 
+class ServiceFeatureInline(admin.StackedInline):
+    model = ServiceFeature
+    extra = 1
+
+
+class ServiceStepInline(admin.StackedInline):
+    model = ServiceStep
+    extra = 1
+
+
+class ServiceTechStackInline(admin.StackedInline):
+    model = ServiceTechStack
+    extra = 1
+
+
+class ServiceFAQInline(admin.StackedInline):
+    model = ServiceFAQ
+    extra = 1
+
+
+class ServiceTestimonialInline(admin.StackedInline):
+    model = ServiceTestimonial
+    extra = 1
+
+
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ['title', 'slug', 'icon', 'order']
     list_editable = ['order']
     ordering = ['order']
     prepopulated_fields = {'slug': ('title',)}
+    inlines = [
+        ServiceFeatureInline,
+        ServiceStepInline,
+        ServiceTechStackInline,
+        ServiceFAQInline,
+        ServiceTestimonialInline
+    ]
     fieldsets = (
         (None, {'fields': ('title', 'slug', 'icon', 'order')}),
         ('Content', {'fields': ('description', 'detail_description', 'image')}),
@@ -156,6 +198,13 @@ class FAQAdmin(admin.ModelAdmin):
 admin.site.register(Project)
 admin.site.register(Contact)
 
+
+@admin.register(NewsletterSubscription)
+class NewsletterSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ['email', 'created_at']
+    search_fields = ['email']
+    readonly_fields = ['created_at']
+
 # Customize admin site
 admin.site.site_header = 'Mukto Soft Admin Panel'
 admin.site.site_title = 'Mukto Soft Admin'
@@ -182,10 +231,21 @@ class ProductFAQInline(admin.StackedInline):
     extra = 1
 
 
+class ProductPricingPlanInline(admin.StackedInline):
+    model = ProductPricingPlan
+    extra = 1
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'slug', 'order']
     list_editable = ['order']
     prepopulated_fields = {'slug': ('title',)}
-    inlines = [ProductFeatureInline, ProductScreenshotInline, ProductTechStackInline, ProductFAQInline]
+    inlines = [
+        ProductFeatureInline,
+        ProductScreenshotInline,
+        ProductTechStackInline,
+        ProductFAQInline,
+        ProductPricingPlanInline
+    ]
     ordering = ['order']

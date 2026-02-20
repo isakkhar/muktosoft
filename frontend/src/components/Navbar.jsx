@@ -13,7 +13,6 @@ const Navbar = ({ siteName, siteHighlight, logo }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Derive the "base" and "highlight" parts of the name
     const baseName = siteName && siteHighlight
         ? siteName.replace(siteHighlight, '')
         : 'Mukto';
@@ -36,17 +35,19 @@ const Navbar = ({ siteName, siteHighlight, logo }) => {
                     <div className="logo-text">{baseName}<span>{highlight}</span></div>
                 </Link>
 
-                <ul className="nav-links">
-                    <li><Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link></li>
-                    <li><Link to="/about" className={isActive('/about') ? 'active' : ''}>About</Link></li>
-                    <li><Link to="/services" className={isActive('/services') ? 'active' : ''}>Services</Link></li>
-                    <li><Link to="/products" className={isActive('/products') ? 'active' : ''}>Products</Link></li>
-                    <li><Link to="/contact" className="nav-cta">Contact Us</Link></li>
-                </ul>
+                <div className="nav-right-container">
+                    <ul className="nav-links">
+                        <li><Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link></li>
+                        <li><Link to="/about" className={isActive('/about') ? 'active' : ''}>About</Link></li>
+                        <li><Link to="/services" className={isActive('/services') ? 'active' : ''}>Services</Link></li>
+                        <li><Link to="/products" className={isActive('/products') ? 'active' : ''}>Products</Link></li>
+                        <li><Link to="/contact" className="nav-cta">Contact Us</Link></li>
+                    </ul>
 
-                <button className="mobile-menu-btn">
-                    ☰
-                </button>
+                    <button className="mobile-menu-btn">
+                        ☰
+                    </button>
+                </div>
             </div>
         </nav>
     );

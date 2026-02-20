@@ -95,6 +95,82 @@ class Service(models.Model):
         return self.title
 
 
+class ServiceFeature(models.Model):
+    """Features for a specific service."""
+    service = models.ForeignKey(Service, related_name='features', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, default='check', help_text='Icon key from frontend')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.service.title} - {self.title}"
+
+
+class ServiceStep(models.Model):
+    """Workflow steps for a specific service."""
+    service = models.ForeignKey(Service, related_name='steps', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, default='search', help_text='Icon key from frontend')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.service.title} - Step {self.order}: {self.title}"
+
+
+class ServiceTechStack(models.Model):
+    """Technologies used in the service."""
+    service = models.ForeignKey(Service, related_name='tech_stack', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    icon = models.CharField(max_length=50, blank=True, help_text='Icon key or URL')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.service.title} - {self.name}"
+
+
+class ServiceFAQ(models.Model):
+    """FAQs specific to a service."""
+    service = models.ForeignKey(Service, related_name='faqs', on_delete=models.CASCADE)
+    question = models.CharField(max_length=300)
+    answer = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Service FAQ'
+
+    def __str__(self):
+        return f"{self.service.title} - {self.question}"
+
+
+class ServiceTestimonial(models.Model):
+    """Testimonials specific to a service."""
+    service = models.ForeignKey(Service, related_name='testimonials', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    role = models.CharField(max_length=100, blank=True)
+    text = models.TextField()
+    rating = models.IntegerField(default=5)
+    image = models.ImageField(upload_to='services/testimonials/', blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.service.title} - {self.name}"
+
+
 class AboutSection(models.Model):
     """About section content."""
     subtitle = models.CharField(max_length=200, default='About Mukto Soft')
@@ -386,3 +462,50 @@ class ProductFAQ(models.Model):
 
     def __str__(self):
         return f"{self.product.title} - {self.question}"
+
+
+class ProductPricingPlan(models.Model):
+    """Pricing plans for a product."""
+    product = models.ForeignKey(Product, related_name='pricing_plans', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    price = models.CharField(max_length=50)
+    period = models.CharField(max_length=50, default='month', help_text='e.g. month, year, one-time')
+    description = models.TextField(blank=True)
+    features_list = models.TextField(help_text='Enter features separated by new lines')
+    button_text = models.CharField(max_length=50, default='Get Started')
+    button_link = models.CharField(max_length=200, blank=True)
+    is_popular = models.BooleanField(default=False)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.product.title} - {self.name}"
+
+class NewsletterSubscription(models.Model):
+    """Newsletter subscriptions."""
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Newsletter Subscription'
+        verbose_name_plural = 'Newsletter Subscriptions'
+
+    def __str__(self):
+        return self.email
+
+class ChatbotLead(models.Model):
+    """Leads captured from the chatbot."""
+    name = models.CharField(max_length=200)
+    mobile = models.CharField(max_length=20)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Chatbot Lead'
+        verbose_name_plural = 'Chatbot Leads'
+
+    def __str__(self):
+        return f"{self.name} ({self.mobile})"

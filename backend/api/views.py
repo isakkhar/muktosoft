@@ -6,18 +6,25 @@ from .models import (
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
-    Product
+    Service, ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
+    Product, NewsletterSubscription, ChatbotLead
 )
 from .serializers import (
     SiteSettingsSerializer, HeroSectionSerializer, HeroFloatingCardSerializer,
-    ServiceSerializer,
+    ServiceSerializer, ServiceDetailSerializer,
     AboutSectionSerializer, StatItemSerializer, PortfolioItemSerializer,
     WhyChooseUsItemSerializer, TestimonialSerializer, CTASectionSerializer,
     ProjectSerializer, TeamMemberSerializer, ContactSerializer,
     CoreValueSerializer, CompanyTimelineSerializer, ClientLogoSerializer,
     WorkProcessSerializer, FAQSerializer,
-    ProductSerializer, ProductDetailSerializer
+    ProductSerializer, ProductDetailSerializer,
+    NewsletterSubscriptionSerializer, ChatbotLeadSerializer
 )
+
+
+class ChatbotLeadViewSet(viewsets.ModelViewSet):
+    queryset = ChatbotLead.objects.all()
+    serializer_class = ChatbotLeadSerializer
 
 
 @api_view(['GET'])
@@ -66,16 +73,22 @@ def homepage_data(request):
 class ServiceViewSet(viewsets.ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
+    lookup_field = 'slug'
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ServiceDetailSerializer
+        return ServiceSerializer
 
 
 @api_view(['GET'])
 def service_detail(request, slug):
-    """Get a single service by slug."""
+    """Get a single service by slug with full details."""
     try:
         service = Service.objects.get(slug=slug)
     except Service.DoesNotExist:
         return Response({'error': 'Service not found'}, status=404)
-    return Response(ServiceSerializer(service, context={'request': request}).data)
+    return Response(ServiceDetailSerializer(service, context={'request': request}).data)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -114,3 +127,14 @@ def product_detail(request, slug):
     except Product.DoesNotExist:
         return Response({'error': 'Product not found'}, status=404)
     return Response(ProductDetailSerializer(product, context={'request': request}).data)
+
+class NewsletterSubscriptionViewSet(viewsets.ModelViewSet):
+    queryset = NewsletterSubscription.objects.all()
+    serializer_class = NewsletterSubscriptionSerializer
+
+    def create(self, request, *args, **kwargs):
+        # Override create to handle already subscribed emails gracefully
+        email = request.data.get('email')
+        if NewsletterSubscription.objects.filter(email=email).exists():
+            return Response({'message': 'Already subscribed!'}, status=200)
+        return super().create(request, *args, **kwargs)

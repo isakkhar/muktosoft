@@ -158,6 +158,55 @@ const ProductDetail = () => {
                 </section>
             )}
 
+            {/* Pricing Section */}
+            {product.pricing_plans && product.pricing_plans.length > 0 && (
+                <section className="product-pricing section-padding">
+                    <div className="container">
+                        <div className="section-header text-center">
+                            <span className="section-subtitle">Pricing Plans</span>
+                            <h2 className="section-title">Investment Options</h2>
+                            <p className="section-desc">Choose the plan that best fits your business needs.</p>
+                        </div>
+                        <div className="pricing-grid">
+                            {product.pricing_plans.map(plan => (
+                                <div className={`pricing-card ${plan.is_popular ? 'popular' : ''}`} key={plan.id}>
+                                    {plan.is_popular && <div className="popular-badge">Most Popular</div>}
+                                    <div className="pricing-header">
+                                        <h3>{plan.name}</h3>
+                                        <div className="price">
+                                            <span className="amount">{plan.price}</span>
+                                            <span className="period">/{plan.period}</span>
+                                        </div>
+                                    </div>
+                                    {plan.description && <p className="pricing-desc">{plan.description}</p>}
+                                    <ul className="pricing-features">
+                                        {plan.features_list.split('\n').map((feature, idx) => (
+                                            <li key={idx}>
+                                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                                </svg>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <div className="pricing-footer">
+                                        {plan.button_link ? (
+                                            <a href={plan.button_link} className={`btn-${plan.is_popular ? 'primary' : 'outline-primary'}`}>
+                                                {plan.button_text}
+                                            </a>
+                                        ) : (
+                                            <Link to="/contact" className={`btn-${plan.is_popular ? 'primary' : 'outline-primary'}`}>
+                                                {plan.button_text}
+                                            </Link>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* FAQ */}
             {product.faqs && product.faqs.length > 0 && (
                 <section className="product-faq section-padding">

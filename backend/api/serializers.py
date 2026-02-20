@@ -4,8 +4,22 @@ from .models import (
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
-    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ
+    Service, ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
+    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ, ProductPricingPlan,
+    NewsletterSubscription, ChatbotLead
 )
+
+
+class ChatbotLeadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatbotLead
+        fields = '__all__'
+
+
+class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsletterSubscription
+        fields = '__all__'
 
 
 class SiteSettingsSerializer(serializers.ModelSerializer):
@@ -27,6 +41,48 @@ class HeroFloatingCardSerializer(serializers.ModelSerializer):
 
 
 class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = '__all__'
+
+
+class ServiceFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceFeature
+        fields = '__all__'
+
+
+class ServiceStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceStep
+        fields = '__all__'
+
+
+class ServiceTechStackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceTechStack
+        fields = '__all__'
+
+
+class ServiceFAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceFAQ
+        fields = '__all__'
+
+
+class ServiceTestimonialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceTestimonial
+        fields = '__all__'
+
+
+class ServiceDetailSerializer(serializers.ModelSerializer):
+    features = ServiceFeatureSerializer(many=True, read_only=True)
+    steps = ServiceStepSerializer(many=True, read_only=True)
+    tech_stack = ServiceTechStackSerializer(many=True, read_only=True)
+    faqs = ServiceFAQSerializer(many=True, read_only=True)
+    testimonials = ServiceTestimonialSerializer(many=True, read_only=True)
+
     class Meta:
         model = Service
         fields = '__all__'
@@ -140,6 +196,12 @@ class ProductFAQSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProductPricingPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductPricingPlan
+        fields = '__all__'
+
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -151,6 +213,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     screenshots = ProductScreenshotSerializer(many=True, read_only=True)
     tech_stack = ProductTechStackSerializer(many=True, read_only=True)
     faqs = ProductFAQSerializer(many=True, read_only=True)
+    pricing_plans = ProductPricingPlanSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
