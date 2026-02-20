@@ -310,7 +310,11 @@ const Home = () => {
                                 <p className="testimonial-text">{t.text}</p>
                                 <div className="testimonial-stars">{'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}</div>
                                 <div className="testimonial-author">
-                                    <div className="testimonial-avatar">{t.avatar_letter || t.name.charAt(0)}</div>
+                                    {t.image ? (
+                                        <img className="testimonial-avatar-img" src={t.image} alt={t.name} />
+                                    ) : (
+                                        <div className="testimonial-avatar">{t.avatar_letter || t.name.charAt(0)}</div>
+                                    )}
                                     <div className="testimonial-info">
                                         <strong>{t.name}</strong>
                                         <span>{t.role}</span>

@@ -2,7 +2,8 @@ from django.contrib import admin
 from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
-    Project, TeamMember, Contact
+    Project, TeamMember, Contact,
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
 )
 
 
@@ -64,6 +65,7 @@ class AboutSectionAdmin(admin.ModelAdmin):
         ('Content', {'fields': ('subtitle', 'title', 'description', 'description2', 'image')}),
         ('Experience Badge', {'fields': ('experience_years', 'experience_label')}),
         ('Features', {'fields': ('feature1', 'feature2', 'feature3', 'feature4')}),
+        ('Mission & Vision', {'fields': ('mission_title', 'mission_description', 'vision_title', 'vision_description')}),
     )
 
     def has_add_permission(self, request):
@@ -110,8 +112,47 @@ class CTASectionAdmin(admin.ModelAdmin):
         return True
 
 
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ['name', 'role']
+
+
+@admin.register(CoreValue)
+class CoreValueAdmin(admin.ModelAdmin):
+    list_display = ['title', 'icon', 'order']
+    list_editable = ['order']
+    ordering = ['order']
+
+
+@admin.register(CompanyTimeline)
+class CompanyTimelineAdmin(admin.ModelAdmin):
+    list_display = ['year', 'title', 'order']
+    list_editable = ['order']
+    ordering = ['order']
+
+
+@admin.register(ClientLogo)
+class ClientLogoAdmin(admin.ModelAdmin):
+    list_display = ['name', 'order']
+    list_editable = ['order']
+    ordering = ['order']
+
+
+@admin.register(WorkProcess)
+class WorkProcessAdmin(admin.ModelAdmin):
+    list_display = ['title', 'icon', 'order']
+    list_editable = ['order']
+    ordering = ['order']
+
+
+@admin.register(FAQ)
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ['question', 'order']
+    list_editable = ['order']
+    ordering = ['order']
+
+
 admin.site.register(Project)
-admin.site.register(TeamMember)
 admin.site.register(Contact)
 
 # Customize admin site

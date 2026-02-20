@@ -4,14 +4,17 @@ from rest_framework.response import Response
 from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
-    Project, TeamMember, Contact
+    Project, TeamMember, Contact,
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
 )
 from .serializers import (
     SiteSettingsSerializer, HeroSectionSerializer, HeroFloatingCardSerializer,
     ServiceSerializer,
     AboutSectionSerializer, StatItemSerializer, PortfolioItemSerializer,
     WhyChooseUsItemSerializer, TestimonialSerializer, CTASectionSerializer,
-    ProjectSerializer, TeamMemberSerializer, ContactSerializer
+    ProjectSerializer, TeamMemberSerializer, ContactSerializer,
+    CoreValueSerializer, CompanyTimelineSerializer, ClientLogoSerializer,
+    WorkProcessSerializer, FAQSerializer
 )
 
 
@@ -28,6 +31,12 @@ def homepage_data(request):
     why_choose = WhyChooseUsItem.objects.all()
     testimonials = Testimonial.objects.all()
     cta = CTASection.objects.first()
+    team_members = TeamMember.objects.all()
+    core_values = CoreValue.objects.all()
+    timeline = CompanyTimeline.objects.all()
+    client_logos = ClientLogo.objects.all()
+    work_process = WorkProcess.objects.all()
+    faqs = FAQ.objects.all()
 
     data = {
         'site_settings': SiteSettingsSerializer(site_settings, context={'request': request}).data if site_settings else None,
@@ -38,8 +47,14 @@ def homepage_data(request):
         'stats': StatItemSerializer(stats, many=True).data,
         'portfolio': PortfolioItemSerializer(portfolio, many=True, context={'request': request}).data,
         'why_choose': WhyChooseUsItemSerializer(why_choose, many=True).data,
-        'testimonials': TestimonialSerializer(testimonials, many=True).data,
+        'testimonials': TestimonialSerializer(testimonials, many=True, context={'request': request}).data,
         'cta': CTASectionSerializer(cta).data if cta else None,
+        'team_members': TeamMemberSerializer(team_members, many=True, context={'request': request}).data,
+        'core_values': CoreValueSerializer(core_values, many=True).data,
+        'timeline': CompanyTimelineSerializer(timeline, many=True).data,
+        'client_logos': ClientLogoSerializer(client_logos, many=True, context={'request': request}).data,
+        'work_process': WorkProcessSerializer(work_process, many=True).data,
+        'faqs': FAQSerializer(faqs, many=True).data,
     }
     return Response(data)
 

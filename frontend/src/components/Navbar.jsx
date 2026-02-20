@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar = ({ siteName, siteHighlight, logo }) => {
     const [scrolled, setScrolled] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -18,6 +19,11 @@ const Navbar = ({ siteName, siteHighlight, logo }) => {
         : 'Mukto';
     const highlight = siteHighlight || 'Soft';
 
+    const isActive = (path) => {
+        if (path === '/') return location.pathname === '/';
+        return location.pathname.startsWith(path);
+    };
+
     return (
         <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="container">
@@ -31,10 +37,10 @@ const Navbar = ({ siteName, siteHighlight, logo }) => {
                 </Link>
 
                 <ul className="nav-links">
-                    <li><Link to="/">Home</Link></li>
-                    <li><Link to="/about">About</Link></li>
-                    <li><Link to="/services">Services</Link></li>
-                    <li><Link to="/products">Products</Link></li>
+                    <li><Link to="/" className={isActive('/') ? 'active' : ''}>Home</Link></li>
+                    <li><Link to="/about" className={isActive('/about') ? 'active' : ''}>About</Link></li>
+                    <li><Link to="/services" className={isActive('/services') ? 'active' : ''}>Services</Link></li>
+                    <li><Link to="/products" className={isActive('/products') ? 'active' : ''}>Products</Link></li>
                     <li><Link to="/contact" className="nav-cta">Contact Us</Link></li>
                 </ul>
 

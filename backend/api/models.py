@@ -108,6 +108,11 @@ class AboutSection(models.Model):
     feature2 = models.CharField(max_length=200, default='24/7 Technical Support')
     feature3 = models.CharField(max_length=200, default='Agile Methodology')
     feature4 = models.CharField(max_length=200, default='Quality Assurance')
+    # Mission & Vision
+    mission_title = models.CharField(max_length=200, default='Our Mission', blank=True)
+    mission_description = models.TextField(default='To empower businesses with innovative software solutions that drive growth, efficiency, and digital transformation.', blank=True)
+    vision_title = models.CharField(max_length=200, default='Our Vision', blank=True)
+    vision_description = models.TextField(default='To be the leading technology partner for businesses worldwide, creating impactful digital experiences that shape the future.', blank=True)
 
     class Meta:
         verbose_name = 'About Section'
@@ -167,6 +172,7 @@ class Testimonial(models.Model):
     text = models.TextField()
     rating = models.IntegerField(default=5)
     avatar_letter = models.CharField(max_length=2, help_text='Initial letter for avatar', blank=True)
+    image = models.ImageField(upload_to='testimonials/', blank=True, null=True, help_text='Client photo')
     order = models.IntegerField(default=0)
 
     class Meta:
@@ -222,3 +228,75 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+
+class CoreValue(models.Model):
+    """Company core values."""
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, default='star', help_text='Icon key: star, heart, shield, target, lightbulb, handshake')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.title
+
+
+class CompanyTimeline(models.Model):
+    """Company milestones timeline."""
+    year = models.CharField(max_length=10)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.year} - {self.title}"
+
+
+class ClientLogo(models.Model):
+    """Client/partner logos."""
+    name = models.CharField(max_length=200)
+    logo = models.ImageField(upload_to='clients/')
+    url = models.URLField(blank=True, null=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return self.name
+
+
+class WorkProcess(models.Model):
+    """How we work — step by step."""
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, default='search', help_text='Icon key: search, pencil, code, rocket')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Work Process Step'
+
+    def __str__(self):
+        return self.title
+
+
+class FAQ(models.Model):
+    """Frequently asked questions."""
+    question = models.CharField(max_length=300)
+    answer = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'FAQ'
+        verbose_name_plural = 'FAQs'
+
+    def __str__(self):
+        return self.question

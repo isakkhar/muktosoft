@@ -2,7 +2,8 @@ from rest_framework import serializers
 from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
-    Project, TeamMember, Contact
+    Project, TeamMember, Contact,
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
 )
 
 
@@ -81,4 +82,34 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
+        fields = '__all__'
+
+
+class CoreValueSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CoreValue
+        fields = '__all__'
+
+
+class CompanyTimelineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyTimeline
+        fields = '__all__'
+
+
+class ClientLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientLogo
+        fields = '__all__'
+
+
+class WorkProcessSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkProcess
+        fields = '__all__'
+
+
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
         fields = '__all__'

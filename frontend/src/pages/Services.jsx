@@ -15,16 +15,38 @@ const SERVICE_ICONS = {
     marketing: <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" fill="none" stroke="currentColor" strokeWidth="2" /></svg>,
 };
 
+const PROCESS_ICONS = {
+    search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>,
+    pencil: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>,
+    code: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
+    rocket: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></svg>,
+};
+
 const Services = () => {
     const [services, setServices] = useState([]);
     const [site, setSite] = useState({});
+    const [workProcess, setWorkProcess] = useState([]);
+    const [whyChoose, setWhyChoose] = useState([]);
+    const [stats, setStats] = useState([]);
+    const [testimonials, setTestimonials] = useState([]);
+    const [faqs, setFaqs] = useState([]);
+    const [clientLogos, setClientLogos] = useState([]);
+    const [cta, setCta] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [openFaq, setOpenFaq] = useState(null);
 
     useEffect(() => {
         axios.get(`${API_URL}/homepage/`)
             .then(res => {
                 setSite(res.data.site_settings || {});
                 setServices(res.data.services || []);
+                setWorkProcess(res.data.work_process || []);
+                setWhyChoose(res.data.why_choose || []);
+                setStats(res.data.stats || []);
+                setTestimonials(res.data.testimonials || []);
+                setFaqs(res.data.faqs || []);
+                setClientLogos(res.data.client_logos || []);
+                setCta(res.data.cta || null);
                 setLoading(false);
                 document.title = `Services - ${res.data.site_settings?.site_name || 'MuktoSoft'}`;
             })
@@ -80,6 +102,185 @@ const Services = () => {
                                 <Link to={`/services/${service.slug}`} className="service-link">Learn More →</Link>
                             </div>
                         ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* How We Work */}
+            {workProcess.length > 0 && (
+                <section className="work-process-section">
+                    <div className="container">
+                        <div className="services-header">
+                            <span className="section-subtitle">Our Process</span>
+                            <h2 className="section-title">How We Deliver</h2>
+                            <p className="section-desc">A streamlined process to deliver quality results every time.</p>
+                        </div>
+
+                        <div className="process-grid">
+                            {workProcess.map((step, idx) => (
+                                <div className="process-card" key={step.id}>
+                                    <div className="process-step-number">{String(idx + 1).padStart(2, '0')}</div>
+                                    <div className="process-icon">
+                                        {PROCESS_ICONS[step.icon] || PROCESS_ICONS.search}
+                                    </div>
+                                    <h4>{step.title}</h4>
+                                    <p>{step.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Why Choose Our Services */}
+            {whyChoose.length > 0 && (
+                <section className="why-section">
+                    <div className="container">
+                        <div className="why-grid">
+                            <div>
+                                <span className="section-subtitle">Why Choose Us</span>
+                                <h2 className="section-title">Why Our Services Stand Out</h2>
+                                <p className="section-desc" style={{ marginBottom: '40px' }}>
+                                    We combine innovation, experience, and dedication to deliver
+                                    technology solutions that make a real difference.
+                                </p>
+                            </div>
+                            <div className="why-list">
+                                {whyChoose.map((item, idx) => (
+                                    <div className="why-item" key={item.id}>
+                                        <div className="why-number">{String(idx + 1).padStart(2, '0')}</div>
+                                        <div className="why-item-content">
+                                            <h4>{item.title}</h4>
+                                            <p>{item.description}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Stats */}
+            {stats.length > 0 && (
+                <section className="stats-section">
+                    <div className="container">
+                        <div className="stats-grid">
+                            {stats.map(stat => (
+                                <div className="stat-item" key={stat.id}>
+                                    <div className="stat-number">{stat.number}</div>
+                                    <div className="stat-label">{stat.label}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Testimonials */}
+            {testimonials.length > 0 && (
+                <section className="testimonials-section">
+                    <div className="container">
+                        <div className="testimonials-header">
+                            <span className="section-subtitle">What Clients Say</span>
+                            <h2 className="section-title">Client Testimonials</h2>
+                        </div>
+
+                        <div className="testimonials-grid">
+                            {testimonials.map(t => (
+                                <div className="testimonial-card" key={t.id}>
+                                    <div className="testimonial-quote">"</div>
+                                    <p className="testimonial-text">{t.text}</p>
+                                    <div className="testimonial-stars">{'★'.repeat(t.rating)}{'☆'.repeat(5 - t.rating)}</div>
+                                    <div className="testimonial-author">
+                                        {t.image ? (
+                                            <img className="testimonial-avatar-img" src={t.image} alt={t.name} />
+                                        ) : (
+                                            <div className="testimonial-avatar">{t.avatar_letter || t.name.charAt(0)}</div>
+                                        )}
+                                        <div className="testimonial-info">
+                                            <strong>{t.name}</strong>
+                                            <span>{t.role}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Client Logos */}
+            {clientLogos.length > 0 && (
+                <section className="clients-section">
+                    <div className="container">
+                        <div className="services-header">
+                            <span className="section-subtitle">Trusted By</span>
+                            <h2 className="section-title">Our Clients & Partners</h2>
+                        </div>
+
+                        <div className="clients-grid">
+                            {clientLogos.map(client => (
+                                <div className="client-logo-card" key={client.id}>
+                                    {client.url ? (
+                                        <a href={client.url} target="_blank" rel="noreferrer">
+                                            <img src={client.logo} alt={client.name} />
+                                        </a>
+                                    ) : (
+                                        <img src={client.logo} alt={client.name} />
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* FAQ */}
+            {faqs.length > 0 && (
+                <section className="faq-section">
+                    <div className="container">
+                        <div className="services-header">
+                            <span className="section-subtitle">Got Questions?</span>
+                            <h2 className="section-title">Frequently Asked Questions</h2>
+                        </div>
+
+                        <div className="faq-list">
+                            {faqs.map(faq => (
+                                <div className={`faq-item ${openFaq === faq.id ? 'active' : ''}`} key={faq.id} onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}>
+                                    <div className="faq-question">
+                                        <h4>{faq.question}</h4>
+                                        <span className="faq-toggle">
+                                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2">
+                                                {openFaq === faq.id ? (
+                                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                                ) : (
+                                                    <><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></>
+                                                )}
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    {openFaq === faq.id && (
+                                        <div className="faq-answer">
+                                            <p>{faq.answer}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* CTA Section */}
+            <section className="cta-section">
+                <div className="container">
+                    <div className="cta-content">
+                        <h2>{cta?.title || 'Need a Custom Solution?'}</h2>
+                        <p>{cta?.description || "Let's discuss how our services can help your business grow with the right technology."}</p>
+                        <div className="cta-buttons">
+                            <Link to="/contact" className="btn-primary">{cta?.button_text || 'Get In Touch'}</Link>
+                        </div>
                     </div>
                 </div>
             </section>
