@@ -1,0 +1,33 @@
+# Master .gitignore for MuktoSoft
+
+# Python/Django
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+db.sqlite3
+media/
+backend/media/
+backend/error_log.txt
+
+# Node/React
+node_modules/
+dist/
+dist-ssr/
+*.local
+frontend/node_modules/
+frontend/dist/
+
+# IDE/System
+.vscode/
+.idea/
+.DS_Store
+*.swp
+Thumbs.db
+
+# Docker
+.docker/
+docker-compose.override.yml

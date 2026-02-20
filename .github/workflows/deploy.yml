@@ -1,0 +1,48 @@
+name: Deployment CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "18"
+        
+    - name: Install Backend Backend Deps
+      run: |
+        cd backend
+        pip install -r requirements.txt
+        
+    - name: Run Backend Tests
+      run: |
+        cd backend
+        python manage.py test
+        
+    - name: Install Frontend Deps
+      run: |
+        cd frontend
+        npm install
+        
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm run build
+        
+    - name: Build Docker Images (Verify)
+      run: |
+        docker-compose build
