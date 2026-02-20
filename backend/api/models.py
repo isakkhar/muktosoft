@@ -74,13 +74,22 @@ class HeroFloatingCard(models.Model):
 class Service(models.Model):
     """Services list."""
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    slug = models.SlugField(max_length=200, unique=True, blank=True, help_text='Auto-generated from title if left blank')
+    description = models.TextField(help_text='Short description shown on cards')
+    detail_description = models.TextField(blank=True, help_text='Full detailed description shown on the service detail page')
     icon = models.CharField(max_length=50, default='web', help_text='Icon key: web, mobile, cloud, security, consulting, marketing')
+    image = models.ImageField(upload_to='services/', blank=True, null=True, help_text='Service detail page banner image')
     order = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['order']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

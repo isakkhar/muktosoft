@@ -47,9 +47,14 @@ class HeroFloatingCardAdmin(admin.ModelAdmin):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['title', 'icon', 'order']
+    list_display = ['title', 'slug', 'icon', 'order']
     list_editable = ['order']
     ordering = ['order']
+    prepopulated_fields = {'slug': ('title',)}
+    fieldsets = (
+        (None, {'fields': ('title', 'slug', 'icon', 'order')}),
+        ('Content', {'fields': ('description', 'detail_description', 'image')}),
+    )
 
 
 @admin.register(AboutSection)
@@ -110,6 +115,6 @@ admin.site.register(TeamMember)
 admin.site.register(Contact)
 
 # Customize admin site
-admin.site.site_header = 'MuktoSoft Admin Panel'
-admin.site.site_title = 'MuktoSoft Admin'
+admin.site.site_header = 'Mukto Soft Admin Panel'
+admin.site.site_title = 'Mukto Soft Admin'
 admin.site.index_title = 'Website Management'

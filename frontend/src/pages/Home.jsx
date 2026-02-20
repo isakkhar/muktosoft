@@ -171,7 +171,7 @@ const Home = () => {
                                 </div>
                                 <h3>{service.title}</h3>
                                 <p>{service.description}</p>
-                                <a href="#" className="service-link">Learn More →</a>
+                                <Link to={`/services/${service.slug}`} className="service-link">Learn More →</Link>
                             </div>
                         ))}
                     </div>
@@ -334,7 +334,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <Footer site={site} />
+            <Footer site={site} logo={site.logo} />
         </div>
     );
 };

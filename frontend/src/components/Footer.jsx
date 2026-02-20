@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Footer = ({ site }) => {
+const Footer = ({ site, logo }) => {
     const s = site || {};
     const baseName = s.site_name && s.site_name_highlight
         ? s.site_name.replace(s.site_name_highlight, '')
@@ -14,7 +14,11 @@ const Footer = ({ site }) => {
                 <div className="footer-grid">
                     <div className="footer-brand">
                         <div className="logo">
-                            <div className="logo-icon">{baseName.charAt(0)}</div>
+                            {logo ? (
+                                <img src={logo} alt={s.site_name || 'Logo'} className="footer-logo-img" />
+                            ) : (
+                                <div className="logo-icon">{baseName.charAt(0)}</div>
+                            )}
                             <div className="logo-text">{baseName}<span>{highlight}</span></div>
                         </div>
                         <p>{s.footer_description || 'We help businesses transform their digital presence with custom software solutions.'}</p>

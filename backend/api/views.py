@@ -49,6 +49,16 @@ class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
 
 
+@api_view(['GET'])
+def service_detail(request, slug):
+    """Get a single service by slug."""
+    try:
+        service = Service.objects.get(slug=slug)
+    except Service.DoesNotExist:
+        return Response({'error': 'Service not found'}, status=404)
+    return Response(ServiceSerializer(service, context={'request': request}).data)
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
