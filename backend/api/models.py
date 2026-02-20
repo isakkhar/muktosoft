@@ -300,3 +300,89 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class Product(models.Model):
+    """Main product model."""
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
+    tagline = models.CharField(max_length=300, blank=True, help_text="Short catchy phrase")
+    description = models.TextField(help_text="Short description for cards")
+    detail_description = models.TextField(help_text="Full description for detail page")
+    logo = models.ImageField(upload_to='products/logos/', help_text="Square logo for cards")
+    hero_image = models.ImageField(upload_to='products/hero/', blank=True, null=True, help_text="Banner image for detail page")
+    demo_link = models.URLField(blank=True, null=True)
+    video_link = models.URLField(blank=True, null=True)
+    brochure_file = models.FileField(upload_to='products/brochures/', blank=True, null=True)
+    order = models.IntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order']
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+class ProductFeature(models.Model):
+    """Features for a specific product."""
+    product = models.ForeignKey(Product, related_name='features', on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    icon = models.CharField(max_length=50, default='check', help_text='Icon key from frontend')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.product.title} - {self.title}"
+
+
+class ProductScreenshot(models.Model):
+    """Screenshots/Gallery for a product."""
+    product = models.ForeignKey(Product, related_name='screenshots', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/screenshots/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.product.title} Screenshot"
+
+
+class ProductTechStack(models.Model):
+    """technologies used in the product."""
+    product = models.ForeignKey(Product, related_name='tech_stack', on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    icon = models.CharField(max_length=50, blank=True, help_text='Icon key or URL')
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.product.title} - {self.name}"
+
+
+class ProductFAQ(models.Model):
+    """FAQs specific to a product."""
+    product = models.ForeignKey(Product, related_name='faqs', on_delete=models.CASCADE)
+    question = models.CharField(max_length=300)
+    answer = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Product FAQ'
+
+    def __str__(self):
+        return f"{self.product.title} - {self.question}"

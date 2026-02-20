@@ -3,7 +3,8 @@ from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
-    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
+    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ
 )
 
 
@@ -112,4 +113,45 @@ class WorkProcessSerializer(serializers.ModelSerializer):
 class FAQSerializer(serializers.ModelSerializer):
     class Meta:
         model = FAQ
+        fields = '__all__'
+
+
+class ProductFeatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductFeature
+        fields = '__all__'
+
+
+class ProductScreenshotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductScreenshot
+        fields = '__all__'
+
+
+class ProductTechStackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductTechStack
+        fields = '__all__'
+
+
+class ProductFAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductFAQ
+        fields = '__all__'
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    features = ProductFeatureSerializer(many=True, read_only=True)
+    screenshots = ProductScreenshotSerializer(many=True, read_only=True)
+    tech_stack = ProductTechStackSerializer(many=True, read_only=True)
+    faqs = ProductFAQSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
         fields = '__all__'

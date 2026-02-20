@@ -5,7 +5,8 @@ from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
-    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
+    Product
 )
 from .serializers import (
     SiteSettingsSerializer, HeroSectionSerializer, HeroFloatingCardSerializer,
@@ -14,7 +15,8 @@ from .serializers import (
     WhyChooseUsItemSerializer, TestimonialSerializer, CTASectionSerializer,
     ProjectSerializer, TeamMemberSerializer, ContactSerializer,
     CoreValueSerializer, CompanyTimelineSerializer, ClientLogoSerializer,
-    WorkProcessSerializer, FAQSerializer
+    WorkProcessSerializer, FAQSerializer,
+    ProductSerializer, ProductDetailSerializer
 )
 
 
@@ -37,6 +39,7 @@ def homepage_data(request):
     client_logos = ClientLogo.objects.all()
     work_process = WorkProcess.objects.all()
     faqs = FAQ.objects.all()
+    products = Product.objects.all()
 
     data = {
         'site_settings': SiteSettingsSerializer(site_settings, context={'request': request}).data if site_settings else None,
@@ -55,6 +58,7 @@ def homepage_data(request):
         'client_logos': ClientLogoSerializer(client_logos, many=True, context={'request': request}).data,
         'work_process': WorkProcessSerializer(work_process, many=True).data,
         'faqs': FAQSerializer(faqs, many=True).data,
+        'products': ProductSerializer(products, many=True, context={'request': request}).data,
     }
     return Response(data)
 
@@ -87,3 +91,26 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+    serializer_class = ContactSerializer
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    """Product list and details."""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ProductDetailSerializer
+        return ProductSerializer
+
+
+@api_view(['GET'])
+def product_detail(request, slug):
+    """Get a single product by slug with full details."""
+    try:
+        product = Product.objects.get(slug=slug)
+    except Product.DoesNotExist:
+        return Response({'error': 'Product not found'}, status=404)
+    return Response(ProductDetailSerializer(product, context={'request': request}).data)

@@ -3,7 +3,8 @@ from .models import (
     SiteSettings, HeroSection, HeroFloatingCard, Service, AboutSection, StatItem,
     PortfolioItem, WhyChooseUsItem, Testimonial, CTASection,
     Project, TeamMember, Contact,
-    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ
+    CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
+    Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ
 )
 
 
@@ -159,3 +160,32 @@ admin.site.register(Contact)
 admin.site.site_header = 'Mukto Soft Admin Panel'
 admin.site.site_title = 'Mukto Soft Admin'
 admin.site.index_title = 'Website Management'
+
+
+class ProductFeatureInline(admin.StackedInline):
+    model = ProductFeature
+    extra = 1
+
+
+class ProductScreenshotInline(admin.StackedInline):
+    model = ProductScreenshot
+    extra = 1
+
+
+class ProductTechStackInline(admin.StackedInline):
+    model = ProductTechStack
+    extra = 1
+
+
+class ProductFAQInline(admin.StackedInline):
+    model = ProductFAQ
+    extra = 1
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ['title', 'slug', 'order']
+    list_editable = ['order']
+    prepopulated_fields = {'slug': ('title',)}
+    inlines = [ProductFeatureInline, ProductScreenshotInline, ProductTechStackInline, ProductFAQInline]
+    ordering = ['order']
