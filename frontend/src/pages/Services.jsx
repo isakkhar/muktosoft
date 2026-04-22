@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import WorkRoadmap from '../components/WorkRoadmap';
 
 const API_URL = 'http://localhost:8000/api';
 
@@ -15,13 +16,6 @@ const SERVICE_ICONS = {
     marketing: <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" fill="none" stroke="currentColor" strokeWidth="2" /></svg>,
 };
 
-const PROCESS_ICONS = {
-    search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>,
-    pencil: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>,
-    code: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>,
-    rocket: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></svg>,
-};
-
 const Services = () => {
     const [services, setServices] = useState([]);
     const [site, setSite] = useState({});
@@ -31,6 +25,7 @@ const Services = () => {
     const [testimonials, setTestimonials] = useState([]);
     const [faqs, setFaqs] = useState([]);
     const [clientLogos, setClientLogos] = useState([]);
+    const [roadmapSteps, setRoadmapSteps] = useState([]);
     const [cta, setCta] = useState(null);
     const [loading, setLoading] = useState(true);
     const [openFaq, setOpenFaq] = useState(null);
@@ -46,6 +41,7 @@ const Services = () => {
                 setTestimonials(res.data.testimonials || []);
                 setFaqs(res.data.faqs || []);
                 setClientLogos(res.data.client_logos || []);
+                setRoadmapSteps(res.data.roadmap_steps || []);
                 setCta(res.data.cta || null);
                 setLoading(false);
                 document.title = `Services - ${res.data.site_settings?.site_name || 'MuktoSoft'}`;
@@ -106,31 +102,8 @@ const Services = () => {
                 </div>
             </section>
 
-            {/* How We Work */}
-            {workProcess.length > 0 && (
-                <section className="work-process-section">
-                    <div className="container">
-                        <div className="services-header">
-                            <span className="section-subtitle">Our Process</span>
-                            <h2 className="section-title">How We Deliver</h2>
-                            <p className="section-desc">A streamlined process to deliver quality results every time.</p>
-                        </div>
-
-                        <div className="process-grid">
-                            {workProcess.map((step, idx) => (
-                                <div className="process-card" key={step.id}>
-                                    <div className="process-step-number">{String(idx + 1).padStart(2, '0')}</div>
-                                    <div className="process-icon">
-                                        {PROCESS_ICONS[step.icon] || PROCESS_ICONS.search}
-                                    </div>
-                                    <h4>{step.title}</h4>
-                                    <p>{step.description}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-            )}
+            {/* How We Work - New Roadmap */}
+            <WorkRoadmap data={roadmapSteps} />
 
             {/* Why Choose Our Services */}
             {whyChoose.length > 0 && (

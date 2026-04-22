@@ -14,6 +14,7 @@ import Portfolio from './pages/Portfolio';
 import Contact from './pages/Contact';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
+import CustomCursor from './components/CustomCursor';
 import useScrollReveal from './hooks/useScrollReveal';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <>
+      <CustomCursor />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />

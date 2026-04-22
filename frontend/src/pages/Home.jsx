@@ -67,7 +67,12 @@ const Home = () => {
     const about = data?.about || {};
     const stats = data?.stats || [];
     const heroCards = data?.hero_cards || [];
-    const portfolio = data?.portfolio || [];
+    const rawPortfolio = data?.portfolio || [];
+    const rawProjects = data?.projects || [];
+    const portfolio = [
+        ...rawPortfolio,
+        ...rawProjects.map(p => ({ ...p, tag: 'Project' }))
+    ];
     const whyChoose = data?.why_choose || [];
     const testimonials = data?.testimonials || [];
     const cta = data?.cta || {};

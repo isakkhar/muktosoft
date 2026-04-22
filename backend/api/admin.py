@@ -6,7 +6,8 @@ from .models import (
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
     ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
     Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ, ProductPricingPlan,
-    NewsletterSubscription, ChatbotLead
+    NewsletterSubscription, ChatbotLead,
+    RoadmapStep, RoadmapStepItem
 )
 
 
@@ -248,4 +249,17 @@ class ProductAdmin(admin.ModelAdmin):
         ProductFAQInline,
         ProductPricingPlanInline
     ]
+    ordering = ['order']
+
+
+class RoadmapStepItemInline(admin.TabularInline):
+    model = RoadmapStepItem
+    extra = 1
+
+
+@admin.register(RoadmapStep)
+class RoadmapStepAdmin(admin.ModelAdmin):
+    list_display = ['title', 'order']
+    list_editable = ['order']
+    inlines = [RoadmapStepItemInline]
     ordering = ['order']

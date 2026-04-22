@@ -7,7 +7,8 @@ from .models import (
     Project, TeamMember, Contact,
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
     Service, ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
-    Product, NewsletterSubscription, ChatbotLead
+    Product, NewsletterSubscription, ChatbotLead,
+    RoadmapStep, RoadmapStepItem
 )
 from .serializers import (
     SiteSettingsSerializer, HeroSectionSerializer, HeroFloatingCardSerializer,
@@ -18,7 +19,8 @@ from .serializers import (
     CoreValueSerializer, CompanyTimelineSerializer, ClientLogoSerializer,
     WorkProcessSerializer, FAQSerializer,
     ProductSerializer, ProductDetailSerializer,
-    NewsletterSubscriptionSerializer, ChatbotLeadSerializer
+    NewsletterSubscriptionSerializer, ChatbotLeadSerializer,
+    RoadmapStepSerializer
 )
 
 
@@ -47,6 +49,8 @@ def homepage_data(request):
     work_process = WorkProcess.objects.all()
     faqs = FAQ.objects.all()
     products = Product.objects.all()
+    roadmap_steps = RoadmapStep.objects.all()
+    projects = Project.objects.all()
 
     data = {
         'site_settings': SiteSettingsSerializer(site_settings, context={'request': request}).data if site_settings else None,
@@ -66,6 +70,8 @@ def homepage_data(request):
         'work_process': WorkProcessSerializer(work_process, many=True).data,
         'faqs': FAQSerializer(faqs, many=True).data,
         'products': ProductSerializer(products, many=True, context={'request': request}).data,
+        'roadmap_steps': RoadmapStepSerializer(roadmap_steps, many=True).data,
+        'projects': ProjectSerializer(projects, many=True, context={'request': request}).data,
     }
     return Response(data)
 

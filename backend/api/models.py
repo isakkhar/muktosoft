@@ -509,3 +509,32 @@ class ChatbotLead(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.mobile})"
+
+
+class RoadmapStep(models.Model):
+    """Roadmap steps for the working plan."""
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Roadmap Step'
+        verbose_name_plural = 'Roadmap Steps'
+
+    def __str__(self):
+        return f"Step {self.order + 1}: {self.title}"
+
+
+class RoadmapStepItem(models.Model):
+    """Specific items/tasks within a roadmap step."""
+    step = models.ForeignKey(RoadmapStep, related_name='items', on_delete=models.CASCADE)
+    text = models.CharField(max_length=300)
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name = 'Roadmap Step Item'
+
+    def __str__(self):
+        return self.text

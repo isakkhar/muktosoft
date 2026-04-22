@@ -6,7 +6,8 @@ from .models import (
     CoreValue, CompanyTimeline, ClientLogo, WorkProcess, FAQ,
     Service, ServiceFeature, ServiceStep, ServiceTechStack, ServiceFAQ, ServiceTestimonial,
     Product, ProductFeature, ProductScreenshot, ProductTechStack, ProductFAQ, ProductPricingPlan,
-    NewsletterSubscription, ChatbotLead
+    NewsletterSubscription, ChatbotLead,
+    RoadmapStep, RoadmapStepItem
 )
 
 
@@ -218,3 +219,17 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
+
+class RoadmapStepItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoadmapStepItem
+        fields = ['id', 'text', 'order']
+
+
+class RoadmapStepSerializer(serializers.ModelSerializer):
+    items = RoadmapStepItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = RoadmapStep
+        fields = ['id', 'title', 'description', 'order', 'items']

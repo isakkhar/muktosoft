@@ -1,0 +1,69 @@
+.custom-cursor-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: normal;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.custom-cursor-container.visible {
+  opacity: 1;
+}
+
+.cursor-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out, background-color 0.3s ease;
+  box-shadow: 0 0 10px rgba(27, 145, 188, 0.5);
+}
+
+.cursor-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              width 0.3s ease, 
+              height 0.3s ease, 
+              opacity 0.3s ease,
+              border-color 0.3s ease;
+  opacity: 0.5;
+}
+
+.cursor-dot.hovered {
+  transform: translate(-50%, -50%) scale(0.5);
+  background-color: var(--primary-dark);
+}
+
+.cursor-ring.hovered {
+  width: 60px;
+  height: 60px;
+  opacity: 0.2;
+  border-color: var(--primary-dark);
+  background-color: var(--primary);
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* Hide cursor on small screens as it's not needed for touch */
+@media (max-width: 1024px) {
+  .custom-cursor-container {
+    display: none;
+  }
+  body {
+    cursor: auto !important;
+  }
+  a, button, [role="button"], .nav-links a, .btn-primary, .btn-outline {
+    cursor: pointer !important;
+  }
+}
