@@ -29,6 +29,17 @@ A fully dynamic, admin-managed company website built with **Django REST API** (b
 
 ---
 
+## 🚀 Branching Strategy
+
+We follow a professional Git workflow to ensure code stability:
+
+1.  **production**: The live, stable version of the application. Only merge from `staging` when ready for release.
+2.  **staging**: The integration branch for testing. All `feature` branches are merged here first.
+3.  **feature/***: Branches for individual tasks/features. Created from `staging`.
+
+**Workflow Example:**
+`feature/your-task` ➡️ `staging` ➡️ `production`
+
 ## 📁 Project Structure
 
 ```
